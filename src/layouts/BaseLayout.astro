@@ -1,0 +1,29 @@
+---
+const { title } = Astro.props;
+---
+
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title ? title + " | Eldara" : "Eldara"}</title>
+    <link href="https://fonts.googleapis.com/css2?family=IM+Fell+English+SC&display=swap" rel="stylesheet" />
+  </head>
+  <body class="bg-parchment font-old text-inkblue">
+    <nav class="bg-inkblue text-white px-6 py-4 flex gap-4 justify-center sticky top-0 z-50">
+      <a href="/" class="hover:underline">Inicio</a>
+      <a href="/historia" class="hover:underline">Historia</a>
+      <a href="/geografia" class="hover:underline">Geografía</a>
+      <a href="/personajes" class="hover:underline">Personajes</a>
+      <a href="/bestiario" class="hover:underline">Bestiario</a>
+      <a href="/leyendas" class="hover:underline">Leyendas</a>
+      <a href="/arboles" class="hover:underline">Árboles Genealógicos</a>
+    </nav>
+    <main>
+      <slot />
+    </main>
+    <footer class="mt-20 py-8 text-center text-sm text-gray-700 border-t border-inkblue">
+      © Eldara - Todos los derechos reservados.
+    </footer>
+  </body>
+</html>

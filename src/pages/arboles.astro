@@ -1,0 +1,10 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import VarethFamilyTree from '../components/VarethFamilyTree.jsx';
+---
+
+<BaseLayout title="Árboles Genealógicos">
+  <section class="py-10">
+    <VarethFamilyTree client:only="react" />
+  </section>
+</BaseLayout>

@@ -1,0 +1,22 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Bestiario">
+  <section class="p-8 max-w-5xl mx-auto">
+    <h1 class="text-3xl font-old text-inkblue mb-4">Bestiario</h1>
+    <p class="mb-6">Aquí encontrarás criaturas que habitan Eldara: desde las más majestuosas hasta las más aterradoras.</p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="bg-white p-4 rounded shadow border border-parchment">
+        <h2 class="font-bold text-lg mb-2">Sombralobo</h2>
+        <p>Una bestia de pesadilla que acecha los bosques malditos del norte.</p>
+      </div>
+      <div class="bg-white p-4 rounded shadow border border-parchment">
+        <h2 class="font-bold text-lg mb-2">Wyrm de Bronce</h2>
+        <p>Una criatura alada que habita en las grietas volcánicas del sur, protectora de viejas reliquias.</p>
+      </div>
+      <!-- Agregá más criaturas acá -->
+    </div>
+  </section>
+</BaseLayout>

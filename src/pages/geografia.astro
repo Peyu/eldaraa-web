@@ -1,0 +1,40 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Geografía">
+  <section class="py-16 px-4 max-w-7xl mx-auto">
+    <h1 class="text-4xl font-old text-center mb-12">Geografía de Eldaraa</h1>
+    
+    <div class="grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+      <!-- Región 1 -->
+      <div class="bg-parchment rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+        <img src="/mapas/valtheris-thumb.jpg" alt="Mapa de Valtheris" class="w-full h-48 object-cover">
+        <div class="p-4">
+          <h2 class="text-xl font-bold mb-2">Imperio de Valtheris</h2>
+          <p class="text-sm text-gray-700">Región central, cuna del antiguo Emperador sin Nombre.</p>
+        </div>
+      </div>
+
+      <!-- Región 2 -->
+      <div class="bg-parchment rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+        <img src="/mapas/varyon-thumb.png" alt="Mapa de Varyon" class="w-full h-48 object-cover">
+        <div class="p-4">
+          <h2 class="text-xl font-bold mb-2">Clanes de Varyon</h2>
+          <p class="text-sm text-gray-700">Tierras salvajes del norte, hogar de guerreros marcados por la llama.</p>
+        </div>
+      </div>
+
+      <!-- Región 3 -->
+      <div class="bg-parchment rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+        <img src="/mapas/thalvion-thumb.jpg" alt="Mapa de Thalvion" class="w-full h-48 object-cover">
+        <div class="p-4">
+          <h2 class="text-xl font-bold mb-2">Thalvion</h2>
+          <p class="text-sm text-gray-700">La Ciudad de los Susurros, construida sobre un bosque encantado.</p>
+        </div>
+      </div>
+
+      <!-- Agregá más regiones copiando este bloque -->
+    </div>
+  </section>
+</BaseLayout>

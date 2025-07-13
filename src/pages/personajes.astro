@@ -1,0 +1,32 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Personajes Destacables">
+  <section class="p-8 max-w-6xl mx-auto">
+    <h1 class="text-3xl font-old text-inkblue mb-6">Personajes Destacables</h1>
+    <p class="mb-8">
+      A lo largo de la historia de Eldara, muchas figuras han marcado el destino del continente: emperadores olvidados, hechiceras eternas, héroes trágicos y profetas locos.
+    </p>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="bg-white border border-parchment p-6 rounded shadow">
+        <h2 class="text-xl font-semibold text-inkblue mb-2">El Emperador sin Nombre</h2>
+        <p class="text-sm mb-2">Antiguo regente del Imperio de Valtheris, su ambición lo llevó a desafiar incluso a los dioses. Ahora solo sobrevive como un susurro en los sueños.</p>
+        <span class="text-xs text-gray-500">Estado: Desaparecido</span>
+      </div>
+
+      <div class="bg-white border border-parchment p-6 rounded shadow">
+        <h2 class="text-xl font-semibold text-inkblue mb-2">Ysandra Vareth</h2>
+        <p class="text-sm mb-2">Actual hechicera de Vareth destinada a Thalvion. Astuta, diplomática y siempre tres pasos adelante de sus enemigos.</p>
+        <span class="text-xs text-gray-500">Estado: Activa</span>
+      </div>
+
+      <div class="bg-white border border-parchment p-6 rounded shadow">
+        <h2 class="text-xl font-semibold text-inkblue mb-2">Karn el Eterno</h2>
+        <p class="text-sm mb-2">Un guerrero inmortal vinculado a la Llama de Yvirn. Algunos lo veneran, otros creen que es una maldición encarnada.</p>
+        <span class="text-xs text-gray-500">Estado: Desconocido</span>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

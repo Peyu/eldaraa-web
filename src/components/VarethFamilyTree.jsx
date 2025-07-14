@@ -3,16 +3,16 @@ import FamilyTree from '@balkangraph/familytree.js';
 
 FamilyTree.templates.custom = Object.assign({}, FamilyTree.templates.base);
 
-FamilyTree.templates.custom.size = [300, 120];
+FamilyTree.templates.custom.size = [240, 80];
 
 FamilyTree.templates.custom.node = 
-  '<rect x="0" y="0" height="120" width="300" fill="#4a4a4a" rx="10" ry="10"></rect>';
+  '<rect x="0" y="0" height="80" width="240" fill="#4a4a4a" rx="10" ry="10"></rect>';
 
 FamilyTree.templates.custom.name = 
-  '<text style="font-size: 16px; font-weight: bold;" fill="#ffffff" x="150" y="70" text-anchor="middle">{val}</text>';
+  '<text style="font-size: 16px; font-weight: bold;" fill="#ffffff" x="120" y="45" text-anchor="middle">{val}</text>';
 
 FamilyTree.templates.custom.title = 
-  '<text style="font-size: 12px;" fill="#f0f0f0" x="150" y="50" text-anchor="middle">{val}</text>';
+  '<text style="font-size: 12px;" fill="#f0f0f0" x="120" y="60" text-anchor="middle">{val}</text>';
 
   export default function VarethFamilyTree() {
   useEffect(() => {
@@ -20,6 +20,7 @@ FamilyTree.templates.custom.title =
       template: 'custom',
       showCollapseBtn: true,
       enableSearch: false,
+      nodeMouseClick: FamilyTree.action.none,
       nodeBinding: {
           name: "name",
           title: "title"
@@ -70,5 +71,5 @@ FamilyTree.templates.custom.title =
     });
   }, []);
 
-  return <div id="tree" style={{ width: '100%', height: '1000px' }}></div>;
+  return <div id="tree" className="w-full h-[1000px]" />;
 }

@@ -10,29 +10,28 @@ const httpsAgent = new Agent({
   }
 });
 
-const response = await fetch("https://localhost:44362/api/Historia", {
+const response = await fetch("https://localhost:44362/api/Civilizacion", {
   dispatcher: httpsAgent
 });
 
-const historias = await response.json();
+const culturas = await response.json();
 ---
 
-<BaseLayout title="Historia">
+<BaseLayout title="Civilización">
   <section class="p-8 max-w-5xl mx-auto">
-    <h1 class="text-3xl font-old text-inkblue mb-4">Historia de Eldaraa</h1>
+    <h1 class="text-3xl font-old text-inkblue mb-4">Cultura de las Cinco Naciones de Eldara</h1>
     <p class="mb-6">
-      Eldaraa ha sido forjada por guerras, traiciones, alianzas imposibles y sueños de poder. Su historia está marcada por la ambición de imperios y la resistencia de pueblos libres.
+      Explorá las costumbres, creencias y estilo de vida de cada civilización que habita este mundo forjado por sueños, magia y conflicto.
     </p>
 
     <div class="space-y-6">
-      {historias.map((h, i) => (
+      {culturas.map((c, i) => (
         <details class="bg-pergamino bg-cover bg-center rounded shadow border border-parchment overflow-hidden" key={i}>
           <summary class="cursor-pointer p-5 font-semibold text-xl bg-parchment/90 hover:bg-parchment">
-            {h.titulo}
-            <p class="text-sm font-normal mt-2 text-gray-700">{h.resumen}</p>
+            {c.nombre}
           </summary>
           <div class="px-5 pb-5 pt-2 text-gray-800 whitespace-pre-line bg-parchment/90">
-            {h.texto}
+            {c.descripcion}
           </div>
         </details>
       ))}

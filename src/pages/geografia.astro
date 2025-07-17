@@ -2,39 +2,165 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
-<BaseLayout title="Geografía">
-  <section class="py-16 px-4 max-w-7xl mx-auto">
-    <h1 class="text-4xl font-old text-center mb-12">Geografía de Eldaraa</h1>
-    
-    <div class="grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-      <!-- Región 1 -->
-      <div class="bg-parchment rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-        <img src="/mapas/valtheris-thumb.jpg" alt="Mapa de Valtheris" class="w-full h-48 object-cover">
-        <div class="p-4">
-          <h2 class="text-xl font-bold mb-2">Imperio de Valtheris</h2>
-          <p class="text-sm text-gray-700">Región central, cuna del antiguo Emperador sin Nombre.</p>
-        </div>
+<BaseLayout title="Mapa Interactivo">
+  <div class="flex justify-center items-center h-screen">
+    <div
+      id="viewer-container"
+      class="h-[80vh] border-2 border-inkblue overflow-hidden relative bg-parchment transition-all duration-300"
+    >
+      <!-- ✅ Leyenda flotante -->
+      <div class="absolute top-2 left-2 z-10 bg-parchment bg-opacity-90 border border-inkblue px-4 py-2 text-sm rounded shadow">
+        <p class="mb-1">🖱️ Zoom con rueda del mouse</p>
+        <p>🖱️ Mover con botón derecho</p>
       </div>
 
-      <!-- Región 2 -->
-      <div class="bg-parchment rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-        <img src="/mapas/varyon-thumb.png" alt="Mapa de Varyon" class="w-full h-48 object-cover">
-        <div class="p-4">
-          <h2 class="text-xl font-bold mb-2">Clanes de Varyon</h2>
-          <p class="text-sm text-gray-700">Tierras salvajes del norte, hogar de guerreros marcados por la llama.</p>
-        </div>
-      </div>
-
-      <!-- Región 3 -->
-      <div class="bg-parchment rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-        <img src="/mapas/thalvion-thumb.jpg" alt="Mapa de Thalvion" class="w-full h-48 object-cover">
-        <div class="p-4">
-          <h2 class="text-xl font-bold mb-2">Thalvion</h2>
-          <p class="text-sm text-gray-700">La Ciudad de los Susurros, construida sobre un bosque encantado.</p>
-        </div>
-      </div>
-
-      <!-- Agregá más regiones copiando este bloque -->
+      <!-- SVG inline container -->
+      <div id="svg-wrapper" class="absolute top-0 left-0 w-full h-full"></div>
     </div>
-  </section>
+  </div>
+
+  <script type="module">
+    const wrapper = document.getElementById("svg-wrapper");
+    const container = document.getElementById("viewer-container");
+
+    let scale = 1;
+    let originX = 0;
+    let originY = 0;
+    let isDragging = false;
+    let lastX = 0;
+    let lastY = 0;
+
+    const response = await fetch('/mapas/EldaraA.svg');
+    const svgText = await response.text();
+    wrapper.innerHTML = svgText;
+
+    const svg = wrapper.querySelector('svg');
+
+    let group = svg.querySelector('g#map-group');
+    if (!group) {
+      group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+      group.setAttribute('id', 'map-group');
+      while (svg.firstChild) {
+        group.appendChild(svg.firstChild);
+      }
+      svg.appendChild(group);
+    }
+
+    svg.style.position = 'absolute';
+    svg.style.top = '0';
+    svg.style.left = '0';
+    svg.style.width = '100%';
+    svg.style.height = '100%';
+    svg.style.overflow = 'visible';
+    svg.style.background = 'transparent';
+    svg.style.fill = 'none';
+    svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+    group.style.transformOrigin = 'top left';
+
+    const backgroundRects = svg.querySelectorAll('rect');
+    backgroundRects.forEach((r) => {
+      const fill = r.getAttribute('fill') || '';
+      const opacity = parseFloat(r.getAttribute('opacity') || '1');
+      if (
+        fill === '#fff' || fill === 'white' || fill === '#ffffff' ||
+        opacity < 0.05 || r.getAttribute('class')?.includes('background')
+      ) {
+        r.remove();
+      }
+    });
+
+    function applyTransform() {
+      const containerRect = container.getBoundingClientRect();
+      const bbox = group.getBBox();
+      const scaledWidth = bbox.width * scale;
+      const scaledHeight = bbox.height * scale;
+
+      const minX = Math.min(0, containerRect.width - scaledWidth);
+      const minY = Math.min(0, containerRect.height - scaledHeight);
+      const maxX = 0;
+      const maxY = 0;
+
+      originX = Math.max(minX, Math.min(originX, maxX));
+      originY = Math.max(minY, Math.min(originY, maxY));
+
+      group.setAttribute('transform', `translate(${originX}, ${originY}) scale(${scale})`);
+    }
+
+    function resizeContainerToFitContent() {
+      const bbox = group.getBBox();
+      const containerHeight = container.clientHeight;
+      const aspectRatio = bbox.width / bbox.height;
+      const newWidth = containerHeight * aspectRatio;
+      container.style.width = `${newWidth}px`;
+    }
+
+    function initialize() {
+      const containerRect = container.getBoundingClientRect();
+      const bbox = group.getBBox();
+
+      const scaleX = containerRect.width / bbox.width;
+      const scaleY = containerRect.height / bbox.height;
+      scale = Math.min(scaleX, scaleY);
+
+      originX = (containerRect.width - bbox.width * scale) / 2;
+      originY = (containerRect.height - bbox.height * scale) / 2;
+
+      resizeContainerToFitContent();
+      applyTransform();
+
+      // 🟡 Forzar una animación de opacidad para hacer visible
+      svg.style.opacity = '0';
+      requestAnimationFrame(() => {
+        svg.style.transition = 'opacity 0.3s ease';
+        svg.style.opacity = '1';
+      });
+    }
+
+    function waitForRenderedBBox(retries = 10) {
+      const bbox = group.getBBox();
+      if (bbox.width > 0 && bbox.height > 0) {
+        initialize();
+      } else if (retries > 0) {
+        setTimeout(() => waitForRenderedBBox(retries - 1), 100);
+      } else {
+        console.warn("⚠️ No se pudo obtener un BBox válido. ¿El SVG tiene contenido visible?");
+      }
+    }
+
+    waitForRenderedBBox();
+
+    container.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      const delta = e.deltaY > 0 ? -0.1 : 0.1;
+      scale = Math.min(Math.max(0.5, scale + delta), 5);
+      applyTransform();
+    });
+
+    container.addEventListener('mousedown', (e) => {
+      if (e.button === 2) {
+        isDragging = true;
+        lastX = e.clientX;
+        lastY = e.clientY;
+        e.preventDefault();
+      }
+    });
+
+    container.addEventListener('mousemove', (e) => {
+      if (isDragging) {
+        const dx = e.clientX - lastX;
+        const dy = e.clientY - lastY;
+        originX += dx;
+        originY += dy;
+        lastX = e.clientX;
+        lastY = e.clientY;
+        applyTransform();
+      }
+    });
+
+    container.addEventListener('mouseup', (e) => {
+      if (e.button === 2) isDragging = false;
+    });
+
+    container.addEventListener('contextmenu', (e) => e.preventDefault());
+  </script>
 </BaseLayout>

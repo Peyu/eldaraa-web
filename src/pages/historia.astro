@@ -2,6 +2,7 @@
 import { fetch } from 'undici';
 import { Agent } from 'undici';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { API_ENDPOINTS } from '../constants/api';
 
 // Crea un agente que ignora certificados autofirmados
 const httpsAgent = new Agent({
@@ -10,7 +11,7 @@ const httpsAgent = new Agent({
   }
 });
 
-const response = await fetch("https://localhost:44362/api/Historia", {
+const response = await fetch(API_ENDPOINTS.historia, {
   dispatcher: httpsAgent
 });
 

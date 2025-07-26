@@ -1,0 +1,8 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CrearPjWizard from '../components/creacion_pj/CreacionPj.tsx';
+---
+
+<BaseLayout title="Creación de Personaje">
+  <CrearPjWizard client:only="solid" />
+</BaseLayout>
